@@ -3,6 +3,7 @@ import json
 import logging.config
 import os
 
+import requests as r
 from flask import Flask, request, make_response
 
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
@@ -60,6 +61,18 @@ def webhook():
                     if command.startswith("/"):
                         command = command.replace("/", "", 1)
                     command = command.lower().strip()
+
+                    params = {
+                        "chat_id": user_tgid,
+                        "parse_mode": "Markdown",
+                        "disable_web_page_preview": 1,
+                        "text": "Hola bitcoin++, test",
+                    }
+                    api_method = api_endpoint + "/sendMessage"
+                    reply = r.post(
+                        api_method,
+                        params=params,
+                    )
 
                 except KeyError as exception:
                     logger.debug(

@@ -15,6 +15,7 @@ app = Flask(__name__)
 app_name = os.getenv("APP_NAME").strip()
 api_endpoint = os.getenv("TG_API_ENDPOINT").strip() + os.getenv("TG_API_KEY").strip()
 bot_webhook_key = os.getenv("BOT_WEBHOOK_KEY").strip()
+ln_invoice = os.getenv("LN_INVOICE").strip()
 
 
 # Main webhook to receive notifications from Telegram
@@ -66,7 +67,11 @@ def webhook():
                         "chat_id": user_tgid,
                         "parse_mode": "Markdown",
                         "disable_web_page_preview": 1,
-                        "text": "Hola bitcoin++, test",
+                        "text": (
+                            "¡Hola!\n\n"
+                            "Please send funds to this Lightning invoice! \u26A1\n\n"
+                            f"```{ln_invoice}```"
+                        ),
                     }
                     api_method = api_endpoint + "/sendMessage"
                     reply = r.post(
